@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+    integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+  <style>
+    .nav-pills .nav-link {
+      border-radius: 1.25rem;
+      font-weight: 900;
+      letter-spacing: 1.3px;
+      font-size: 1.2em;
+    }
+
+    .filter .nav-pills .nav-link.active,
+    .nav-pills .show>.nav-link {
+      color: #212529;
+      background-color: #f7f7f7;
+    }
+
+    .comments .panel-heading {
+      padding: 2px 15px !important;
+
+    }
+
+    h3.panel-body-title {
+      font-weight: 600;
+      letter-spacing: 0.3px;
+    }
+
+    
+    
+
+    p.panel-body-text {
+      font-size: 17px;
+    }
+
+    @keyframes zoom-in {
+      0% {
+        transform: scale(.1);
+      }
+
+      100% {
+        transform: none;
+      }
+    }
+
+    @keyframes rotate-right {
+      0% {
+        transform: translate(-100%) rotate(-100deg);
+      }
+
+      100% {
+        transform: none;
+      }
+    }
+
+    .is-animated {
+      animation: .6s zoom-in;
+      /*animation: .6s rotate-right; */
+    }
+
+    .container-fluid {
+      padding-top: 2em;
+    }
+
+    i.bi.bi-emoji-smile-fill {
+      color: #1faa00;
+    }
+
+    i.bi.bi-emoji-frown-fill {
+      color: #dd2c00;
+    }
+
+    i.bi.bi-emoji-neutral-fill {
+      color: #9e9e9e;
+    }
+
+    i.bi.bi-emoji-smile-upside-down-fill {
+      color: #4d2c91;
+    }
+
+    .head-info {
+      display: flex;
+      line-height: 2em;
+    }
+
+    .adtn-info.text-right {
+      float: right;
+    }
+
+    .ch-inner a {
+      text-decoration: none;
+      line-height: 20px;
+      vertical-align: bottom;
+      padding: 0 1em;
+      font-weight: 500;
+      color: #277cfa;
+    }
+
+    .adtn-info span.label.label-default {
+      margin-right: 1em;
+      padding: 0.5em 0.8em;
+      background-color: #6c757d !important;
+    }
+
+    .adtn-info a {
+      line-height: 1.3em;
+    }
+
+    span.label.label-custom {
+      color: #6c757d;
+      border: 2px solid #ccc;
+      margin: 0 0.5em;
+      padding: 0.3em 0.6em;
+      border-radius: 0.4em;
+    }
+
+    .card-add-tag .form-control {
+      display: inline;
+      width: 10%;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+    }
+
+    .filter li.list-group-item {
+      cursor: pointer;
+    }
+
+    .mb-4 {
+      margin-bottom: 4em;
+    }
+
+    .col-md-4.adtn-info.text-right {
+      margin-top: 1em;
+    }
+    div#message {
+      padding: 5em;
+      display: none;
+      border-color: #041528;
+      background: #fafafa;
+  }
+    #message h3 {
+      text-align: center;
+
+    }
+
+    @media screen and (max-width: 425px) {
+      .head-info {
+        display: flex;
+        line-height: 2.5em;
+      }
+
+      .head-info p {
+        font-size: 1.5rem;
+      }
+
+      .adtn-info span.label.label-default {
+        margin-right: 0em;
+        padding: 0.2em 0.4em;
+      }
+
+    }
+
+    @media screen and (max-width: 375px) {
+      .ch-inner a {
+        line-height: 24px;
+        padding: 0 0.5em;
+
+      }
+
+      .card-add-tag .form-control {
+
+        width: 100%;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        margin-top: 1em;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-2 col-sm-2 col-xs-12 filter">
+        <ul class="nav nav-pills nav-stacked">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="#" data-filter="all">All</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#" data-filter="positive">Positive</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#" data-filter="neutral">Neutral</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#" data-filter="negative">Negative</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#" data-filter="mixed">Mixed</a>
+          </li>
+        </ul>
+        
+        <p>Filter by Tag:</p>
+        <input class="form-control" id="myInput" type="text" placeholder="Search..">
+        <br>
+        <ul class="list-group" id="myList">
+          <li class="list-group-item">
+            <a href="#" data-tag="a"> a</a>
+          </li>
+          <li class="list-group-item">
+            <a href="#" data-tag="b"> b</a>
+          </li>
+          <li class="list-group-item">
+            <a href="#" data-tag="c"> c</a>
+          </li>
+          <li class="list-group-item">
+            <a href="#" data-tag="d"> d</a>
+          </li>
+          <li class="list-group-item">
+            <a href="#" data-tag="e"> e</a>
+          </li>
+        </ul>
+        
+      </div>
+
+      <div class="col-md-10 col-sm-10 col-xs-12">
+        <div class="row comments" id="comment_display">
+
+          
+          <div class="col-md-12 mb-4" data-category="positive">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+
+                <div class="row ">
+                  <div class="col-md-8 col-sm-6 col-xs-7 ch-inner">
+
+                    <div class="panel-title head-info">
+                      <h3><i class="bi bi-emoji-smile-fill"></i></h3>
+                      <p><a href="">Harry Potter</a></p>
+                    </div>
+
+                  </div>
+                  <div class="col-md-4 col-sm-6 col-xs-5 adtn-info text-right">
+                    
+                      <span class="label label-default">1 week ago</span>
+                      <a href="#"><span class="label label-default">3<i class="bi bi-list"></i></span></a>
+                    
+                  </div>
+                </div>
+
+              </div>
+
+              <div class="panel-body">
+                <h3 class="panel-body-title">Special title treatment</h3>
+                <p class="panel-body-text">With supporting text below as a natural lead-in to additional content.</p>
+
+                <div class="row card-add-tag">
+                  <div class="col-md-12 ">
+                    <hr>
+                    <span class="label label-custom" data-commentTag="">Tag 1</span>
+                    <span class="label label-custom">Tag 2</span>
+                    <span class="label label-custom">Tag 3</span>
+                    <span class="label label-custom">Tag 4</span>
+                    <input class="form-control" list="datalistOptions" id="tagDataList" placeholder="Add Tag...">
+                    <datalist id="datalistOptions">
+                      <option value="San Francisco">
+                      <option value="New York">
+                      <option value="Seattle">
+                      <option value="Los Angeles">
+                      <option value="Chicago">
+                    </datalist>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-12 mb-4" data-category="positive">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+
+                <div class="row ">
+                  <div class="col-md-8 col-sm-6 col-xs-7 ch-inner">
+
+                    <div class="panel-title head-info">
+                      <h3><i class="bi bi-emoji-smile-fill"></i></h3>
+                      <p><a href="">Harry Potter</a></p>
+                    </div>
+
+                  </div>
+                  <div class="col-md-4 col-sm-6 col-xs-5 adtn-info text-right">
+                    
+                      <span class="label label-default">1 week ago</span>
+                      <a href="#"><span class="label label-default">3<i class="bi bi-list"></i></span></a>
+                    
+                  </div>
+                </div>
+
+              </div>
+
+              <div class="panel-body">
+                <h3 class="panel-body-title">Special title treatment</h3>
+                <p class="panel-body-text">With supporting text below as a natural lead-in to additional content.</p>
+
+                <div class="row card-add-tag">
+                  <div class="col-md-12 ">
+                    <hr>
+                    <span class="label label-custom" data-commentTag="">Tag 1</span>
+                    <span class="label label-custom">Tag 2</span>
+                    <span class="label label-custom">Tag 3</span>
+                    <span class="label label-custom">Tag 4</span>
+                    <input class="form-control" list="datalistOptions" id="tagDataList" placeholder="Add Tag...">
+                    <datalist id="datalistOptions">
+                      <option value="San Francisco">
+                      <option value="New York">
+                      <option value="Seattle">
+                      <option value="Los Angeles">
+                      <option value="Chicago">
+                    </datalist>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-12 mb-4" data-category="negative">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <div class="row">
+                  <div class="col-md-8 col-sm-6 col-xs-7 ch-inner">
+                    <div class="panel-title head-info">
+                      <h3><i class="bi bi-emoji-frown-fill"></i></h3>
+                      <p><a href="">Harry Potter</a></p>
+                    </div>
+                  </div>
+                  <div class="col-md-4 col-sm-6 col-xs-5 adtn-info text-right">
+                    
+                      <span class="label label-default">1 week ago</span>
+                      <a href="#"><span class="label label-default">3<i class="bi bi-list"></i></span></a>
+                    
+                  </div>
+                </div>
+
+
+
+              </div>
+              <div class="panel-body">
+                <h3 class="panel-body-title">Special title treatment</h3>
+                <p class="panel-body-text">With supporting text below as a natural lead-in to additional content.</p>
+
+                <div class="row card-add-tag">
+                  <div class="col-md-12">
+                    <hr>
+                    <span class="label label-custom" data-commentTag="">Tag 1</span>
+                    <span class="label label-custom">Tag 2</span>
+                    <span class="label label-custom">Tag 3</span>
+                    <span class="label label-custom">Tag 4</span>
+                    <input class="form-control" list="datalistOptions" id="tagDataList" placeholder="Add Tag...">
+                    <datalist id="datalistOptions">
+                      <option value="San Francisco">
+                      <option value="New York">
+                      <option value="Seattle">
+                      <option value="Los Angeles">
+                      <option value="Chicago">
+                    </datalist>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-12 mb-4" data-category="neutral">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+
+                <div class="row">
+                  <div class="col-md-8 col-sm-6 col-xs-7 ch-inner">
+                    <div class="panel-title head-info">
+                      <h3><i class="bi bi-emoji-neutral-fill"></i></h3>
+                      <p><a href="">Harry Potter</a></p>
+                    </div>
+                  </div>
+                  <div class="col-md-4 col-sm-6 col-xs-5 adtn-info text-right">
+                    <div class="d-flex justify-content-end">
+                      <span class="label label-default">1 week ago</span>
+                      <a href="#"><span class="label label-default">3<i class="bi bi-list"></i></span></a>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+              <div class="panel-body">
+                <h3 class="panel-body-title">Special title treatment</h3>
+                <p class="panel-body-text">With supporting text below as a natural lead-in to additional content.</p>
+
+                <div class="row card-add-tag">
+                  <div class="col-md-12">
+                    <hr>
+                    <span class="label label-custom" data-commentTag="a">Tag 1</span>
+                    <span class="label label-custom">Tag 2</span>
+                    <span class="label label-custom">Tag 3</span>
+                    <span class="label label-custom">Tag 4</span>
+                    <input class="form-control" list="datalistOptions" id="tagDataList" placeholder="Add Tag...">
+                    <datalist id="datalistOptions">
+                      <option value="San Francisco">
+                      <option value="New York">
+                      <option value="Seattle">
+                      <option value="Los Angeles">
+                      <option value="Chicago">
+                    </datalist>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-12 mb-4" data-category="mixed">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <div class="row">
+                  <div class="col-md-8 col-sm-6 col-xs-7 ch-inner">
+                    <div class="panel-title head-info">
+                      <h3><i class="bi bi-emoji-smile-upside-down-fill"></i></h3>
+                      <p><a href="">Harry Potter</a></p>
+                    </div>
+
+                  </div>
+                  <div class="col-md-4 col-sm-6 col-xs-5 adtn-info text-right">
+                    
+                      <span class="label label-default">1 week ago</span>
+                      <a href="#"><span class="label label-default">3<i class="bi bi-list"></i></span></a>
+                    
+                  </div>
+                </div>
+
+              </div>
+              <div class="panel-body">
+                <h3 class="panel-body-title">Special title treatment</h3>
+                <p class="panel-body-text">With supporting text below as a natural lead-in to additional content.</p>
+
+                <div class="row card-add-tag">
+                  <div class="col-md-12">
+                    <hr>
+                    <span class="label label-custom" data-commentTag="a">Tag 1</span>
+                    <span class="label label-custom">Tag 2</span>
+                    <span class="label label-custom">Tag 3</span>
+                    <span class="label label-custom">Tag 4</span>
+                    <input class="form-control" list="datalistOptions" id="tagDataList" placeholder="Add Tag...">
+                    <datalist id="datalistOptions">
+                      <option value="San Francisco">
+                      <option value="New York">
+                      <option value="Seattle">
+                      <option value="Los Angeles">
+                      <option value="Chicago">
+                    </datalist>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-12 mb-4" data-category="neutral">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+
+                <div class="row">
+                  <div class="col-md-8 col-sm-6 col-xs-7 ch-inner">
+                    <div class="panel-title head-info">
+                      <h3><i class="bi bi-emoji-neutral-fill"></i></h3>
+                      <p><a href="">Harry Potter</a></p>
+                    </div>
+                  </div>
+                  <div class="col-md-4 col-sm-6 col-xs-5 adtn-info text-right">
+                    
+                      <span class="label label-default">1 week ago</span>
+                      <a href="#"><span class="label label-default">3<i class="bi bi-list"></i></span></a>
+                    
+                  </div>
+                </div>
+
+              </div>
+              <div class="panel-body">
+                <h3 class="panel-body-title">Special title treatment</h3>
+                <p class="panel-body-text">With supporting text below as a natural lead-in to additional content.</p>
+
+                <div class="row card-add-tag">
+                  <div class="col-md-12">
+                    <hr>
+                    <span class="label label-custom" data-commentTag="a">Tag 1</span>
+                    <span class="label label-custom">Tag 2</span>
+                    <span class="label label-custom">Tag 3</span>
+                    <span class="label label-custom">Tag 4</span>
+                    <input class="form-control" list="datalistOptions" id="tagDataList" placeholder="Add Tag...">
+                    <datalist id="datalistOptions">
+                      <option value="San Francisco">
+                      <option value="New York">
+                      <option value="Seattle">
+                      <option value="Los Angeles">
+                      <option value="Chicago">
+                    </datalist>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        
+
+
+        </div>
+        <div id="message" class="panel panel-default"></div>
+      </div>
+    </div>
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.js"></script>
+  <script>
+    $(document).ready(function () {
+
+      $("#myInput").on("keyup", function () {
+        var value = $(this).val().toLowerCase();
+        $("#myList li").filter(function () {
+          $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        });
+      });
+    });
+
+
+
+
+    (function ($) {
+      var $filters = $('.filter [data-filter]'),
+        $comments = $('.comments [data-category]'),
+        $tagList = $('.filter [data-tag]'),
+        $tagCat = $('.comments [data-commentTag]');
+
+
+
+
+
+      if ($('#comment_display').children().length < 1) {
+        $("#message").css("display", "block");
+        $("#message").html("<h3>No comments to show yet!</h3>");
+
+
+      }
+
+
+      $filters.on('click', function (e) {
+        e.preventDefault();
+        var $this = $(this);
+
+        $filters.removeClass('active');
+        $this.addClass('active');
+
+        var $filterCat = $this.attr('data-filter');
+
+
+
+
+
+        if ($filterCat == 'all') {
+          $comments.removeClass('is-animated')
+            .fadeOut().promise().done(function () {
+              $comments.addClass('is-animated').fadeIn();
+            });
+        } else {
+          $comments.removeClass('is-animated')
+            .fadeOut().promise().done(function () {
+              $comments.filter('[data-category = "' + $filterCat + '"]')
+                .addClass('is-animated').fadeIn();
+            });
+        }
+      });
+
+    })(jQuery);
+
+
+    (function ($) {
+      var $commentz = $('.comments [data-category]'),
+        $tagListz = $('.filter [data-tag]'),
+        $tagCatz = $('.comments [data-commentTag]');
+      console.log($tagListz);
+
+      
+
+      $tagListz.on('click', function (e) {
+        e.preventDefault();
+        var $this = $(this);
+
+
+
+
+        $tagListz.removeClass('active');
+        $this.addClass('active');
+
+        var $filterTagz = $this.attr('data-tag');
+
+
+
+        $(".label-custom").each(function (index) {
+          $ct = $(this).attr('data-commenttag');
+          if ($ct !== undefined) {
+            var arr = [];
+            arr.push($ct);
+
+          }
+
+          $.each(arr, function (index, value) {
+            var x = value;
+
+
+            if ($filterTagz == x) {
+
+              $commentz.removeClass('is-animated')
+                .fadeOut().promise().done(function () {
+                  $commentz.filter('[data-commenttag = "' + x + '"]').addClass('is-animated').fadeIn();
+
+                });
+            }
+          });
+
+        });
+
+      });
+    })(jQuery);
+
+
+  </script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"
+    integrity="sha384-eMNCOe7tC1doHpGoWe/6oMVemdAVTMs2xqW4mwXrXsW0L84Iytr2wi5v2QjrP/xp"
+    crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+    integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+    crossorigin="anonymous"></script>
+</body>
+
+</html>
